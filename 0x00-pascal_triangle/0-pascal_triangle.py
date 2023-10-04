@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """
-Generate Pascal's Triangle up to the nth row.
+Create Pascal's Triangle function
 """
 
 def pascal_triangle(n):
@@ -14,20 +14,19 @@ def pascal_triangle(n):
         list of lists: A list of lists representing Pascal's Triangle up to the nth row.
                        Returns an empty list if n <= 0.
     """
-    if n <= 0:
-        return []
-
-    triangle = [[1]]
-
-    for row_number in range(1, n):
-        previous_row = triangle[-1]
-        new_row = [1]
+    triangle = []
+    
+    for row_number in range(n):
+        current_row = []
         
-        for i in range(len(previous_row) - 1):
-            new_element = previous_row[i] + previous_row[i + 1]
-            new_row.append(new_element)
+        for column_number in range(row_number + 1):
+            if column_number == 0 or column_number == row_number:
+                element = 1
+            else:
+                element = triangle[row_number - 1][column_number - 1] + triangle[row_number - 1][column_number]
+            
+            current_row.append(element)
         
-        new_row.append(1)
-        triangle.append(new_row)
-
+        triangle.append(current_row)
+    
     return triangle
