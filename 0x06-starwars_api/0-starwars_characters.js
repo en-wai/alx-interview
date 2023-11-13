@@ -2,30 +2,42 @@
 
 const request = require('request');
 
-const movieId = process.argv[2];
-const movieEndpoint = 'https://swapi-api.alx-tools.com/api/films/' + movieId;
+// Retrieve the film ID from the command line arguments
+const filmId = process.argv[2];
 
-function sendRequest (characterList, index) {
-  if (characterList.length === index) {
+// Construct the API endpoint for fetching film information
+const filmEndpoint = 'https://swapi-api.alx-tools.com/api/films/' + filmId;
+
+// Function to fetch and display character names
+function fetchData(characterUrls, index) {
+  // Base case: check if all characters have been processed
+  if (characterUrls.length === index) {
     return;
   }
 
-  request(characterList[index], (error, response, body) => {
+  // Make a request to the API endpoint for a specific character
+  request(characterUrls[index], (error, response, body) => {
     if (error) {
       console.log(error);
     } else {
+      // Display the name of the character
       console.log(JSON.parse(body).name);
-      sendRequest(characterList, index + 1);
+      
+      // Recursively fetch and display the next character
+      fetchData(characterUrls, index + 1);
     }
   });
 }
 
-request(movieEndpoint, (error, response, body) => {
+// Make a request to the API endpoint for film information
+request(filmEndpoint, (error, response, body) => {
   if (error) {
     console.log(error);
   } else {
-    const characterList = JSON.parse(body).characters;
-
-    sendRequest(characterList, 0);
+    // Extract character URLs from the film information
+    const characterUrls = JSON.parse(body).characters;
+    
+    // Initiate the process of fetching and displaying character names
+    fetchData(characterUrls, 0);
   }
 });
